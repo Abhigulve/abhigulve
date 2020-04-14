@@ -44,14 +44,17 @@ public class ApplicationTest {
 
     private List<ElectronicDevice> getElectronicDevices() {
         List<ElectronicDevice> electronicDevices = new ArrayList<>();
-        electronicDevices.add(new ElectronicDevice(5, ElectronicDeviceType.BULB));
+        electronicDevices.add(new ElectronicDevice(5, ElectronicDeviceType.LIGHT));
         electronicDevices.add(new ElectronicDevice(10, ElectronicDeviceType.AC));
         return electronicDevices;
     }
 
     @Test
     public void endToEndTest() {
-        sensor.setState(new Request(true, 0, CorridorType.SUBCORRIDOR, 1));
-    }
 
+        sensor.setState(new Request(true, 0, CorridorType.SUBCORRIDOR, 2));
+        sensor.setState(new Request(false, 0, CorridorType.SUBCORRIDOR, 2));
+        sensor.setState(new Request(true, 0, CorridorType.SUBCORRIDOR, 1));
+        sensor.setState(new Request(false, 0, CorridorType.SUBCORRIDOR, 1));
+    }
 }

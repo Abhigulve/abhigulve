@@ -15,7 +15,9 @@ public class Hotel {
     public void updateHotelDeviceStatus(Request request) {
         try {
             Floor floor = getFloorFromFloorNumber(request.getFloorNumber());
+
             floor.updateDevicesOnFloor(request);
+            System.out.println(floor);
         } catch (InvalidFloorNUmberException e) {
             e.printStackTrace();
         }

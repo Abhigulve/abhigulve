@@ -1,5 +1,5 @@
 package model;
 
 public enum ElectronicDeviceType {
-    BULB,AC
+    LIGHT,AC
 }

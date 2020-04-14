@@ -10,7 +10,7 @@ public class Corridor {
     private List<ElectronicDevice> electronicDevices;
     private DeviceOnStrategy deviceOnStrategy;
     private int corridorNumber;
-    private int currentPowerCunsumedByCoridor;
+    private int currentPowerConsumedByCorridor;
 
     @Override
     public boolean equals(Object o) {
@@ -42,16 +42,26 @@ public class Corridor {
         this.corridorNumber = corridorNumber;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        for (ElectronicDevice electronicDevice : electronicDevices) {
+            s.append(electronicDevice).append(" ");
+        }
+        return
+                corridorType + " " + corridorNumber + " : " + s;
+    }
+
     public Corridor(CorridorType corridorType, List<ElectronicDevice> electronicDevices, DeviceOnStrategy deviceOnStrategy, int corridorNumber) {
         this.corridorType = corridorType;
         this.corridorNumber = corridorNumber;
         this.electronicDevices = electronicDevices;
         this.deviceOnStrategy = deviceOnStrategy;
-        this.currentPowerCunsumedByCoridor = this.deviceOnStrategy.defaultDeviceOnOffRule(electronicDevices);
+        this.currentPowerConsumedByCorridor = this.deviceOnStrategy.defaultDeviceOnOffRule(electronicDevices);
     }
 
-    public int getCurrentPowerCunsumedByCoridor() {
-        return currentPowerCunsumedByCoridor;
+    public int getCurrentPowerConsumedByCorridor() {
+        return currentPowerConsumedByCorridor;
     }
 
     public CorridorType getCorridorType() {
@@ -70,16 +80,47 @@ public class Corridor {
         this.electronicDevices = electronicDevices;
     }
 
-    private int powerConsumptionOfCorridor() {
-        return electronicDevices.stream().filter(ElectronicDevice::isSwitchOn)
-                .mapToInt(ElectronicDevice::getPowerRating).sum();
+    public void switchOnLightInCorridor() {
+        electronicDevices.forEach(device -> {
+            if (device.getelectronicDeviceType().equals(ElectronicDeviceType.LIGHT)) {
+                device.on();
+                currentPowerConsumedByCorridor += device.getPowerRating();
+            }
+        });
     }
 
-    public void updateDeviceStateInCorridor(Request request) {
-        if (request.isMovement()) {
-            deviceOnStrategy.startDeviceInCorridor(electronicDevices);
-            currentPowerCunsumedByCoridor = powerConsumptionOfCorridor();
-        } else {
+    public int switchOffACsOfCorridor(int power) {
+        int powerSaveAfterAcOff = 0;
+        for (ElectronicDevice electronicDevice : electronicDevices) {
+            if (electronicDevice.getelectronicDeviceType().equals(ElectronicDeviceType.AC)
+                    && electronicDevice.isSwitchOn() && powerSaveAfterAcOff <= power) {
+                electronicDevice.off();
+                powerSaveAfterAcOff += electronicDevice.getPowerRating();
+                currentPowerConsumedByCorridor -= electronicDevice.getPowerRating();
+            }
         }
+        return powerSaveAfterAcOff;
+    }
+
+    public void switchOffLightOfCorridor() {
+        electronicDevices.forEach(device -> {
+            if (device.getelectronicDeviceType().equals(ElectronicDeviceType.LIGHT)) {
+                device.off();
+                currentPowerConsumedByCorridor -= device.getPowerRating();
+            }
+        });
+    }
+
+    public int switchOnACsOfCorridor(int extraPower) {
+        int powerAfterACsOn = 0;
+        for (ElectronicDevice electronicDevice : electronicDevices) {
+            if (electronicDevice.getelectronicDeviceType().equals(ElectronicDeviceType.AC)
+                    && !electronicDevice.isSwitchOn() && (powerAfterACsOn + electronicDevice.getPowerRating()) <= extraPower) {
+                electronicDevice.on();
+                powerAfterACsOn += electronicDevice.getPowerRating();
+                currentPowerConsumedByCorridor += electronicDevice.getPowerRating();
+            }
+        }
+        return powerAfterACsOn;
     }
 }

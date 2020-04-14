@@ -41,5 +41,10 @@ public class ElectronicDevice {
     public void setelectronicDeviceType(ElectronicDeviceType electronicDeviceType) {
         this.electronicDeviceType = electronicDeviceType;
     }
+
+    @Override
+    public String toString() {
+        return electronicDeviceType + " : " + (isSwitchOn() ? "ON" : "OFF");
+    }
 }
 
