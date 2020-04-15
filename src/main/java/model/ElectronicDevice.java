@@ -2,7 +2,6 @@ package model;
 
 public class ElectronicDevice {
     private boolean electronicSwitch;
-    private int powerRating;
     private ElectronicDeviceType electronicDeviceType;
 
     public void on() {
@@ -10,7 +9,6 @@ public class ElectronicDevice {
     }
 
     public ElectronicDevice(int powerRating, ElectronicDeviceType electronicDeviceType) {
-        this.powerRating = powerRating;
         this.electronicDeviceType = electronicDeviceType;
     }
 
@@ -27,11 +25,7 @@ public class ElectronicDevice {
     }
 
     public int getPowerRating() {
-        return powerRating;
-    }
-
-    public void setPowerRating(int powerRating) {
-        this.powerRating = powerRating;
+        return electronicDeviceType.getUnits();
     }
 
     public ElectronicDeviceType getelectronicDeviceType() {

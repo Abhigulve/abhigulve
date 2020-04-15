@@ -16,6 +16,11 @@ public class Floor {
         this.floorNumber = floorNumber;
     }
 
+    public Corridor getCorridorByCorriDorNumber(int corridorNUmber, CorridorType corridorType) {
+      return   corridors.stream().filter(corridor -> corridor.getCorridorType().equals(corridorType)
+                && corridor.getCorridorNumber() == corridorNUmber).findFirst().get();
+
+    }
 
     public List<Corridor> getCorridors() {
         return corridors;
@@ -35,7 +40,7 @@ public class Floor {
         for (Corridor corridor : corridors) {
             stringBuilder.append(corridor).append("\n");
         }
-        return "\t\t\t\tFloor " + floorNumber +"\n"+ stringBuilder;
+        return "\t\t\t\tFloor " + floorNumber + "\n" + stringBuilder;
     }
 
     public int getFloorNumber() {

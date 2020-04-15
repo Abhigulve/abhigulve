@@ -1,12 +1,10 @@
 package model;
 
-import model.CorridorType;
-
 public class Request {
 
     private int floorNumber;
     private CorridorType corridorType;
-    private int corridorNUmber;
+    private int corridorNumber;
     private boolean movement;
 
     public boolean isMovement() {
@@ -34,17 +32,17 @@ public class Request {
     }
 
     public int getCorridorNumber() {
-        return corridorNUmber;
+        return corridorNumber;
     }
 
-    public void setCorridorNumber(int corridorNUmber) {
-        this.corridorNUmber = corridorNUmber;
+    public void setCorridorNumber(int corridorNumber) {
+        this.corridorNumber = corridorNumber;
     }
 
     public Request(boolean movement, int floorNumber, CorridorType corridorType, int corridorNumber) {
         this.floorNumber = floorNumber;
         this.corridorType = corridorType;
-        this.corridorNUmber = corridorNumber;
+        this.corridorNumber = corridorNumber;
         this.movement = movement;
     }
 }

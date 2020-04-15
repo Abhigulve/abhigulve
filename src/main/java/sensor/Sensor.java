@@ -1,18 +1,17 @@
 package sensor;
 
 import controller.Controller;
-import model.CorridorType;
 import model.Request;
-import org.omg.PortableInterceptor.ObjectReferenceFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
 
 public class Sensor {
+    private Controller observer;
 
-    private List<Controller> observers = new ArrayList<>();
     private Request request;
+
+
+    public Sensor(Controller observer) {
+        this.observer = observer;
+    }
 
     public Request getState() {
         return request;
@@ -24,12 +23,10 @@ public class Sensor {
     }
 
     public void subscribe(Controller observer) {
-        observers.add(observer);
+        this.observer = (observer);
     }
 
     public void notifyAllObservers() {
-        for (Controller observer : observers) {
-            observer.update(request);
-        }
+        observer.update(request);
     }
 }

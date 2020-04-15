@@ -4,6 +4,7 @@ import strategy.DeviceOnStrategy;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Corridor {
     protected CorridorType corridorType;
@@ -89,11 +90,15 @@ public class Corridor {
         });
     }
 
+    public List<ElectronicDevice> listOfAcs() {
+        return electronicDevices.stream().filter(e -> e.getelectronicDeviceType().equals(ElectronicDeviceType.AC)).collect(Collectors.toList());
+    }
+
     public int switchOffACsOfCorridor(int power) {
         int powerSaveAfterAcOff = 0;
-        for (ElectronicDevice electronicDevice : electronicDevices) {
-            if (electronicDevice.getelectronicDeviceType().equals(ElectronicDeviceType.AC)
-                    && electronicDevice.isSwitchOn() && powerSaveAfterAcOff <= power) {
+
+        for (ElectronicDevice electronicDevice : listOfAcs()) {
+            if (electronicDevice.isSwitchOn() && powerSaveAfterAcOff <= power) {
                 electronicDevice.off();
                 powerSaveAfterAcOff += electronicDevice.getPowerRating();
                 currentPowerConsumedByCorridor -= electronicDevice.getPowerRating();
@@ -113,9 +118,8 @@ public class Corridor {
 
     public int switchOnACsOfCorridor(int extraPower) {
         int powerAfterACsOn = 0;
-        for (ElectronicDevice electronicDevice : electronicDevices) {
-            if (electronicDevice.getelectronicDeviceType().equals(ElectronicDeviceType.AC)
-                    && !electronicDevice.isSwitchOn() && (powerAfterACsOn + electronicDevice.getPowerRating()) <= extraPower) {
+        for (ElectronicDevice electronicDevice : listOfAcs()) {
+            if (!electronicDevice.isSwitchOn() && (powerAfterACsOn + electronicDevice.getPowerRating()) <= extraPower) {
                 electronicDevice.on();
                 powerAfterACsOn += electronicDevice.getPowerRating();
                 currentPowerConsumedByCorridor += electronicDevice.getPowerRating();
